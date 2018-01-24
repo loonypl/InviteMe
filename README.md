@@ -2,7 +2,7 @@
 ## Invite your friends and get prizes. Recommendation plugin for Minecraft 1.12.2
 ![alt InviteMe](https://i.imgur.com/B4vY0KF.png)
 # Download
-Mediafire: http://ceesty.com/wgJ0jq
+Mediafire: http://ceesty.com/wgJ0jq<br/>
 VirusTotal (scan): https://www.virustotal.com/#/file/ca52eca38a77c5f446eac76fda300dc96a617422aab32ff452e7dd2e291d1ea0/details
 #
 Permissions:
