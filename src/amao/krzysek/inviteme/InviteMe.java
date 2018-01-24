@@ -57,6 +57,12 @@ public class InviteMe extends JavaPlugin {
     public void onDisable() {
         // configuration files
         saveFiles();
+        // mysql
+        try {
+            mysql.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     // configuration files
