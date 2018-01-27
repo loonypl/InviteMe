@@ -3,7 +3,7 @@
 ![alt InviteMe](https://i.imgur.com/B4vY0KF.png)
 # Download
 Mediafire: http://ceesty.com/wgK8RY<br/>
-VirusTotal (scan): https://www.virustotal.com/#/file/f15de22bcf72795fb9ac731639184ab037ac93e0d9407e6441b944174e43c93c/detection
+VirusTotal (scan): https://www.virustotal.com/#/file/02bc40500a4a8dcba7aed6ab071da629735f1bee5819d738f46298c3bbaed240/detection
 #
 Permissions:
 * inviteme.default - gives default access (recommended for non-admin players)
