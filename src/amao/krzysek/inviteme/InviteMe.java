@@ -47,6 +47,7 @@ public class InviteMe extends JavaPlugin {
             mysql.connect(this.user, this.password, this.host, this.port, this.database);
             Bukkit.getLogger().info("Successfully connected InviteMe with MySQL !");
         } catch (SQLException e) {
+            Bukkit.getLogger().warning("Can not connect to MySQL ! Check you MySQL configuration section in config.yml !");
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -59,8 +60,9 @@ public class InviteMe extends JavaPlugin {
         saveFiles();
         // mysql
         try {
-            mysql.closeConnection();
+            if (mysql.getConnection() != null && !(mysql.getConnection().isClosed())) mysql.closeConnection();
         } catch (SQLException e) {
+            Bukkit.getLogger().warning("Can not close MySQL connection. Check your MySQL configuration section in config.yml !");
             e.printStackTrace();
         }
     }

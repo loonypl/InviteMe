@@ -45,14 +45,16 @@ public class Commands implements CommandExecutor {
                             if (args[0].equalsIgnoreCase("stats")) {
                                 try {
                                     final LinkedHashMap<String, Object> stats = user.getStatistics();
-                                    user.sendInfo("");
-                                    user.sendInfo("&7--- [&6InvMe&7] ---------------------------");
-                                    user.sendInfo("&7" + InviteMe.getYaml().getString("messages.stats-command.nickname") + ": &e" + user.getName());
-                                    user.sendInfo("&7" + InviteMe.getYaml().getString("messages.stats-command.invites") + ": &e" + stats.get("invites"));
-                                    user.sendInfo("&7" + InviteMe.getYaml().getString("messages.stats-command.points") + ": &e" + stats.get("points"));
-                                    user.sendInfo("&7" + InviteMe.getYaml().getString("messages.stats-command.recommended") + ": &e" + stats.get("recommended").toString().replaceAll("false", InviteMe.getYaml().getString("messages.stats-command.recommended-no")).replaceAll("true", InviteMe.getYaml().getString("messages.stats-command.recommended-yes")));
-                                    user.sendInfo("&7--- [&6InvMe&7] ---------------------------");
-                                    user.sendInfo("");
+                                    if (stats != null) {
+                                        user.sendInfo("");
+                                        user.sendInfo("&7--- [&6InvMe&7] ---------------------------");
+                                        user.sendInfo("&7" + InviteMe.getYaml().getString("messages.stats-command.nickname") + ": &e" + user.getName());
+                                        user.sendInfo("&7" + InviteMe.getYaml().getString("messages.stats-command.invites") + ": &e" + stats.get("invites"));
+                                        user.sendInfo("&7" + InviteMe.getYaml().getString("messages.stats-command.points") + ": &e" + stats.get("points"));
+                                        user.sendInfo("&7" + InviteMe.getYaml().getString("messages.stats-command.recommended") + ": &e" + stats.get("recommended").toString().replaceAll("false", InviteMe.getYaml().getString("messages.stats-command.recommended-no")).replaceAll("true", InviteMe.getYaml().getString("messages.stats-command.recommended-yes")));
+                                        user.sendInfo("&7--- [&6InvMe&7] ---------------------------");
+                                        user.sendInfo("");
+                                    } else user.sendInfo(ChatColor.translateAlternateColorCodes('&', InviteMe.getYaml().getString("messages.mysql-error")));
                                 } catch (SQLException e) {
                                     e.printStackTrace();
                                 }
@@ -60,27 +62,29 @@ public class Commands implements CommandExecutor {
                             if (args[0].equalsIgnoreCase("prizes")) {
                                 try {
                                     final LinkedHashMap<String, Object> stats = user.getStatistics();
-                                    final String guiName = ChatColor.translateAlternateColorCodes('&', "&7InvMe &e| " + InviteMe.getYaml().getString("prizes.gui.name").replaceAll("%player%", user.getName()).replaceAll("%points%", String.valueOf(stats.get("points"))).replaceAll("%invites%", String.valueOf(stats.get("invites"))));
-                                    Inventory inventory = Bukkit.createInventory(null, InviteMe.getYaml().getInt("prizes.gui.size"), guiName);
-                                    final String activePrizes = InviteMe.getYaml().getString("prizes.gui.active");
-                                    for (final String checkPrize : activePrizes.split(";")) {
-                                        final String prizeName = ChatColor.translateAlternateColorCodes('&', InviteMe.getYaml().getString("prizes.gui.set." + checkPrize + ".name"));
-                                        final String prizeDesc = ChatColor.translateAlternateColorCodes('&', InviteMe.getYaml().getString("prizes.gui.set." + checkPrize + ".description"));
-                                        final int prizePrice = InviteMe.getYaml().getInt("prizes.gui.set." + checkPrize + ".price");
-                                        final int prizePos = InviteMe.getYaml().getInt("prizes.gui.set." + checkPrize + ".position");
-                                        final String prizeItem = InviteMe.getYaml().getString("prizes.gui.set." + checkPrize + ".item");
-                                        ItemStack prizeStack = new ItemStack(Material.getMaterial(prizeItem), 1);
-                                        ItemMeta prizeMeta = prizeStack.getItemMeta();
-                                        prizeMeta.setDisplayName(prizeName);
-                                        LinkedList<String> newLore = new LinkedList<>();
-                                        newLore.add(ChatColor.translateAlternateColorCodes('&', "&6" + InviteMe.getYaml().getString("prizes.gui.texts.name") + ": " + prizeName));
-                                        newLore.add(ChatColor.translateAlternateColorCodes('&', "&6" + InviteMe.getYaml().getString("prizes.gui.texts.description") + ": " + prizeDesc));
-                                        newLore.add(ChatColor.translateAlternateColorCodes('&', "&6" + InviteMe.getYaml().getString("prizes.gui.texts.price") + ": &e" + prizePrice));
-                                        prizeMeta.setLore(newLore);
-                                        prizeStack.setItemMeta(prizeMeta);
-                                        inventory.setItem(prizePos, prizeStack);
-                                    }
-                                    user.getPlayer().openInventory(inventory);
+                                    if (stats != null) {
+                                        final String guiName = ChatColor.translateAlternateColorCodes('&', "&7InvMe &e| " + InviteMe.getYaml().getString("prizes.gui.name").replaceAll("%player%", user.getName()).replaceAll("%points%", String.valueOf(stats.get("points"))).replaceAll("%invites%", String.valueOf(stats.get("invites"))));
+                                        Inventory inventory = Bukkit.createInventory(null, InviteMe.getYaml().getInt("prizes.gui.size"), guiName);
+                                        final String activePrizes = InviteMe.getYaml().getString("prizes.gui.active");
+                                        for (final String checkPrize : activePrizes.split(";")) {
+                                            final String prizeName = ChatColor.translateAlternateColorCodes('&', InviteMe.getYaml().getString("prizes.gui.set." + checkPrize + ".name"));
+                                            final String prizeDesc = ChatColor.translateAlternateColorCodes('&', InviteMe.getYaml().getString("prizes.gui.set." + checkPrize + ".description"));
+                                            final int prizePrice = InviteMe.getYaml().getInt("prizes.gui.set." + checkPrize + ".price");
+                                            final int prizePos = InviteMe.getYaml().getInt("prizes.gui.set." + checkPrize + ".position");
+                                            final String prizeItem = InviteMe.getYaml().getString("prizes.gui.set." + checkPrize + ".item");
+                                            ItemStack prizeStack = new ItemStack(Material.getMaterial(prizeItem), 1);
+                                            ItemMeta prizeMeta = prizeStack.getItemMeta();
+                                            prizeMeta.setDisplayName(prizeName);
+                                            LinkedList<String> newLore = new LinkedList<>();
+                                            newLore.add(ChatColor.translateAlternateColorCodes('&', "&6" + InviteMe.getYaml().getString("prizes.gui.texts.name") + ": " + prizeName));
+                                            newLore.add(ChatColor.translateAlternateColorCodes('&', "&6" + InviteMe.getYaml().getString("prizes.gui.texts.description") + ": " + prizeDesc));
+                                            newLore.add(ChatColor.translateAlternateColorCodes('&', "&6" + InviteMe.getYaml().getString("prizes.gui.texts.price") + ": &e" + prizePrice));
+                                            prizeMeta.setLore(newLore);
+                                            prizeStack.setItemMeta(prizeMeta);
+                                            inventory.setItem(prizePos, prizeStack);
+                                        }
+                                        user.getPlayer().openInventory(inventory);
+                                    } else user.sendInfo(ChatColor.translateAlternateColorCodes('&', InviteMe.getYaml().getString("messages.mysql-error")));
                                 } catch (SQLException e) {
                                     e.printStackTrace();
                                 }
@@ -101,14 +105,16 @@ public class Commands implements CommandExecutor {
                                         try {
                                             if (c.exists()) {
                                                 final LinkedHashMap<String, Object> stats = c.getStatistics();
-                                                user.sendInfo("");
-                                                user.sendInfo("&7--- [&6InvMe&7] ---------------------------");
-                                                user.sendInfo("&7" + InviteMe.getYaml().getString("messages.stats-command.nickname") + ": &e" + stats.get("nickname"));
-                                                user.sendInfo("&7" + InviteMe.getYaml().getString("messages.stats-command.invites") + ": &e" + stats.get("invites"));
-                                                user.sendInfo("&7" + InviteMe.getYaml().getString("messages.stats-command.points") + ": &e" + stats.get("points"));
-                                                user.sendInfo("&7" + InviteMe.getYaml().getString("messages.stats-command.recommended") + ": &e" + stats.get("recommended").toString().replaceAll("false", InviteMe.getYaml().getString("messages.stats-command.recommended-no")).replaceAll("true", InviteMe.getYaml().getString("messages.stats-command.recommended-yes")));
-                                                user.sendInfo("&7--- [&6InvMe&7] ---------------------------");
-                                                user.sendInfo("");
+                                                if (stats != null) {
+                                                    user.sendInfo("");
+                                                    user.sendInfo("&7--- [&6InvMe&7] ---------------------------");
+                                                    user.sendInfo("&7" + InviteMe.getYaml().getString("messages.stats-command.nickname") + ": &e" + stats.get("nickname"));
+                                                    user.sendInfo("&7" + InviteMe.getYaml().getString("messages.stats-command.invites") + ": &e" + stats.get("invites"));
+                                                    user.sendInfo("&7" + InviteMe.getYaml().getString("messages.stats-command.points") + ": &e" + stats.get("points"));
+                                                    user.sendInfo("&7" + InviteMe.getYaml().getString("messages.stats-command.recommended") + ": &e" + stats.get("recommended").toString().replaceAll("false", InviteMe.getYaml().getString("messages.stats-command.recommended-no")).replaceAll("true", InviteMe.getYaml().getString("messages.stats-command.recommended-yes")));
+                                                    user.sendInfo("&7--- [&6InvMe&7] ---------------------------");
+                                                    user.sendInfo("");
+                                                } else user.sendInfo(ChatColor.translateAlternateColorCodes('&', InviteMe.getYaml().getString("messages.mysql-error")));
                                             } else user.sendMessage(InviteMe.getYaml().getString("messages.player-not-found-db"));
                                         } catch (SQLException e) {
                                             e.printStackTrace();
@@ -123,19 +129,20 @@ public class Commands implements CommandExecutor {
                                             try {
                                                 if (c.exists()) {
                                                     final LinkedHashMap<String, Object> stats = user.getStatistics();
-                                                    if (!((boolean) stats.get("recommended"))) {
-                                                        final LinkedHashMap<String, Object> cstats = c.getStatistics();
-                                                        final int cpoints = ((int) cstats.get("points")) + InviteMe.getYaml().getInt("recommendations.points");
-                                                        final int cinvites = ((int) cstats.get("invites")) + 1;
-                                                        user.setRecommended(true);
-                                                        c.setInvites(cinvites);
-                                                        c.setPoints(cpoints);
-                                                        user.sendMessage(InviteMe.getYaml().getString("messages.success-recommended").replaceAll("%player%", c.getName()));
-                                                        c.sendMessage(InviteMe.getYaml().getString("messages.success-recommended-recieved").replaceAll("%player%", user.getName()));
-                                                    } else
-                                                        user.sendMessage(InviteMe.getYaml().getString("messages.already-recommended"));
-                                                } else
-                                                    user.sendMessage(InviteMe.getYaml().getString("messages.player-not-found-db"));
+                                                    if (stats != null) {
+                                                        if (!((boolean) stats.get("recommended"))) {
+                                                            final LinkedHashMap<String, Object> cstats = c.getStatistics();
+                                                            if (cstats != null) {
+                                                                final int cpoints = ((int) cstats.get("points")) + InviteMe.getYaml().getInt("recommendations.points");
+                                                                final int cinvites = ((int) cstats.get("invites")) + 1;
+                                                                if (user.setRecommended(true) && c.setInvites(cinvites) && c.setPoints(cpoints)) {
+                                                                    user.sendMessage(InviteMe.getYaml().getString("messages.success-recommended").replaceAll("%player%", c.getName()));
+                                                                    c.sendMessage(InviteMe.getYaml().getString("messages.success-recommended-recieved").replaceAll("%player%", user.getName()));
+                                                                } else user.sendInfo(ChatColor.translateAlternateColorCodes('&', InviteMe.getYaml().getString("messages.mysql-error")));
+                                                            } else user.sendInfo(ChatColor.translateAlternateColorCodes('&', InviteMe.getYaml().getString("messages.mysql-error")));
+                                                        } else user.sendMessage(InviteMe.getYaml().getString("messages.already-recommended"));
+                                                    } else user.sendInfo(ChatColor.translateAlternateColorCodes('&', InviteMe.getYaml().getString("messages.mysql-error")));
+                                                } else user.sendMessage(InviteMe.getYaml().getString("messages.player-not-found-db"));
                                             } catch (SQLException e) {
                                                 e.printStackTrace();
                                             }
@@ -154,8 +161,8 @@ public class Commands implements CommandExecutor {
                                             try {
                                                 if (c.exists()) {
                                                     if (args[2].chars().allMatch(Character::isDigit)) {
-                                                        c.setInvites(Integer.parseInt(args[2]));
-                                                        user.sendMessage(InviteMe.getYaml().getString("messages.invites-set").replaceAll("%player%", c.getName()).replaceAll("%amount%", args[2]));
+                                                        if (c.setInvites(Integer.parseInt(args[2]))) user.sendMessage(InviteMe.getYaml().getString("messages.invites-set").replaceAll("%player%", c.getName()).replaceAll("%amount%", args[2]));
+                                                        else user.sendInfo(ChatColor.translateAlternateColorCodes('&', InviteMe.getYaml().getString("messages.mysql-error")));
                                                     } else
                                                         user.sendMessage(InviteMe.getYaml().getString("messages.not-numeric"));
                                                 } else
@@ -174,8 +181,8 @@ public class Commands implements CommandExecutor {
                                             try {
                                                 if (c.exists()) {
                                                     if (args[2].chars().allMatch(Character::isDigit)) {
-                                                        c.setPoints(Integer.parseInt(args[2]));
-                                                        user.sendMessage(InviteMe.getYaml().getString("messages.points-set").replaceAll("%player%", c.getName()).replaceAll("%amount%", args[2]));
+                                                        if (c.setPoints(Integer.parseInt(args[2]))) user.sendMessage(InviteMe.getYaml().getString("messages.points-set").replaceAll("%player%", c.getName()).replaceAll("%amount%", args[2]));
+                                                        else user.sendInfo(ChatColor.translateAlternateColorCodes('&', InviteMe.getYaml().getString("messages.mysql-error")));
                                                     } else
                                                         user.sendMessage(InviteMe.getYaml().getString("messages.not-numeric"));
                                                 } else

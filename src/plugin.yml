@@ -1,6 +1,6 @@
 main: amao.krzysek.inviteme.InviteMe
 name: InviteMe
-version: 1.2
+version: 1.2.1
 description: Recommendation system
 author: krzysek
 load: POSTWORLD

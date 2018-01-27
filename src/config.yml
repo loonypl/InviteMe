@@ -80,6 +80,8 @@ prizes:
 # Messages - Configuration
 #
 messages:
+  # mysql statement error
+  mysql-error: '&cMySQL error occured. Please contact with administration.'
   # incorrect usage
   usage: '&cIncorrect usage. Get more info at &f/inviteme'
   # no access

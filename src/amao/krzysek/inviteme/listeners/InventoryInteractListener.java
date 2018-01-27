@@ -28,14 +28,17 @@ public class InventoryInteractListener implements Listener {
             try {
                 final User user = new User((Player) e.getWhoClicked());
                 final LinkedHashMap<String, Object> stats = user.getStatistics();
-                final int prizePrice = InviteMe.getYaml().getInt("prizes.gui.set." + prizeId + ".price");
-                if ((int) stats.get("points") >= prizePrice) {
-                    user.setPoints(((int) stats.get("points")) - prizePrice);
-                    final String prizeMsg = ChatColor.translateAlternateColorCodes('&', InviteMe.getYaml().getString("prizes.gui.set." + prizeId + ".message"));
-                    final List<String> commands = InviteMe.getYaml().getStringList("prizes.gui.set." + prizeId + ".commands");
-                    user.sendMessage(prizeMsg);
-                    for (final String command : commands) Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replaceAll("%player%", user.getName()));
-                } else user.sendMessage(InviteMe.getYaml().getString("messages.not-enough-points"));
+                if (stats != null) {
+                    final int prizePrice = InviteMe.getYaml().getInt("prizes.gui.set." + prizeId + ".price");
+                    if ((int) stats.get("points") >= prizePrice) {
+                        user.setPoints(((int) stats.get("points")) - prizePrice);
+                        final String prizeMsg = ChatColor.translateAlternateColorCodes('&', InviteMe.getYaml().getString("prizes.gui.set." + prizeId + ".message"));
+                        final List<String> commands = InviteMe.getYaml().getStringList("prizes.gui.set." + prizeId + ".commands");
+                        user.sendMessage(prizeMsg);
+                        for (final String command : commands)
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replaceAll("%player%", user.getName()));
+                    } else user.sendMessage(InviteMe.getYaml().getString("messages.not-enough-points"));
+                } else user.sendInfo(ChatColor.translateAlternateColorCodes('&', InviteMe.getYaml().getString("messages.mysql-error")));
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
